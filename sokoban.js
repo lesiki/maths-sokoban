@@ -16,39 +16,90 @@ Sokoban = function() {
 	player,
 
 	init = function() {
+		var deadblocks, deadblock, moveableblocks, moveableblock;
 		sokoban.constants = new Constants(10, 600);
 		objects = new Objects();
 
-		var b = new sokoban.drawable.DeadBlock();
-		b.putAt(3,2);
-		objects.push(b);
+		deadblocks = [
+			{ x:0, y:0 },
+			{ x:1, y:0 },
+			{ x:2, y:0 },
+			{ x:0, y:1 },
+			{ x:1, y:1 },
+			{ x:2, y:1 },
+			{ x:0, y:2 },
+			{ x:1, y:2 },
+			{ x:2, y:2 },
+			{ x:7, y:0 },
+			{ x:8, y:0 },
+			{ x:9, y:0 },
+			{ x:7, y:1 },
+			{ x:8, y:1 },
+			{ x:9, y:1 },
+			{ x:7, y:2 },
+			{ x:8, y:2 },
+			{ x:9, y:2 },
+			{ x:0, y:7 },
+			{ x:1, y:7 },
+			{ x:2, y:7 },
+			{ x:0, y:8 },
+			{ x:1, y:8 },
+			{ x:2, y:8 },
+			{ x:0, y:9 },
+			{ x:1, y:9 },
+			{ x:2, y:9 },
+			{ x:7, y:7 },
+			{ x:8, y:7 },
+			{ x:9, y:7 },
+			{ x:7, y:8 },
+			{ x:8, y:8 },
+			{ x:9, y:8 },
+			{ x:7, y:9 },
+			{ x:8, y:9 },
+			{ x:9, y:9 }
+		];
+		for(var i =0; i < deadblocks.length; i++) {
+			deadblock = new sokoban.drawable.DeadBlock();
+			deadblock.putAt(deadblocks[i].x, deadblocks[i].y);
+			objects.push(deadblock);
+		}
 
 		player = new sokoban.drawable.Player();
-		player.putAt(8,1);
+		player.putAt(8,5);
 		objects.push(player);
 
 		var t = new sokoban.drawable.Target(5);
 		t.putAt(9,3);
 		objects.push(t);
 
-		var m = new sokoban.drawable.MovableBlock(2);
-		m.putAt(3,8);
-		objects.push(m);
+		t = new sokoban.drawable.Target(9);
+		t.putAt(0,6);
+		objects.push(t);
 
-		var m2 = new sokoban.drawable.MovableBlock(3);
-		m2.putAt(3,5);
-		objects.push(m2);
+		// 1,1,2,3,6
+		moveableblocks = [
+			{ x:4, y:1, value:1 },
+			{ x:6, y:8, value:1 },
+			{ x:2, y:5, value:2 },
+			{ x:2, y:6, value:3 },
+			{ x:8, y:4, value:6 }
+		];
+		for(var i = 0; i < moveableblocks.length; i++ ) {
+			moveableblock = new sokoban.drawable.MovableBlock(moveableblocks[i].value);
+			moveableblock.putAt(moveableblocks[i].x, moveableblocks[i].y);
+			objects.push(moveableblock);
+		}
 
 		var plus = new sokoban.drawable.MathBlock('+', function(a,b) {
 			return parseInt(a) + parseInt(b);
 		});
-		plus.putAt(5,3);
+		plus.putAt(3,3);
 		objects.push(plus);
 
 		var times = new sokoban.drawable.MathBlock('x', function(a,b) {
 			return parseInt(a) * parseInt(b);
 		});
-		times.putAt(5,4);
+		times.putAt(4,4);
 		objects.push(times);
 
 		var minus = new sokoban.drawable.MathBlock('-', function(a,b) {
