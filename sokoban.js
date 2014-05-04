@@ -6,6 +6,7 @@ Constants = function(initialGridSize, initialCanvasWidth){
 Sokoban = function() {
 	var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d'),
+	objects = [],
 
 	init = function() {
 		sokoban.constants = new Constants(10, 600);
@@ -13,23 +14,23 @@ Sokoban = function() {
 
 		var b = new sokoban.drawable.DeadBlock();
 		b.putAt(3,2);
-		b.draw();
 
 		var p = new sokoban.drawable.Player();
 		p.putAt(8,1);
-		p.draw();
 
 		var t = new sokoban.drawable.Target(3);
 		t.putAt(9,3);
-		t.draw();
 
 		var m = new sokoban.drawable.MovableBlock(2);
 		m.putAt(3,8);
-		m.draw();
 
 		var plus = new sokoban.drawable.MathBlock('+', function() { console.log('plusss'); });
 		plus.putAt(5,3);
-		plus.draw();
+
+		objects.push(b,p,t,m,plus);
+		for(var i = 0; i < objects.length; i++) {
+			objects[i].draw();
+		}
 	},
 	drawGridLines = function() {
 		var gradient=context.createLinearGradient(0,0,600, 600);
@@ -56,7 +57,6 @@ Sokoban = function() {
 	sokoban.drawable = {};
 	sokoban.drawable.DeadBlock = function() {
 		this.draw = function() {
-			console.log('draw block');
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			context.fillStyle=gradient;
 			context.beginPath();
@@ -72,7 +72,6 @@ Sokoban = function() {
 	};
 	sokoban.drawable.Player = function() {
 		this.draw = function() {
-			console.log('draw player');
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			context.fillStyle=gradient;
 			context.beginPath();
@@ -89,7 +88,6 @@ Sokoban = function() {
 	sokoban.drawable.Target = function(val) {
 		this.value = val;
 		this.draw = function() {
-			console.log('draw target');
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#794");
 			gradient.addColorStop("1","#794");
@@ -116,7 +114,6 @@ Sokoban = function() {
 	sokoban.drawable.MovableBlock = function(val) {
 		this.value = val;
 		this.draw = function() {
-			console.log('draw movable');
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#794");
 			gradient.addColorStop("1","#794");
@@ -145,7 +142,6 @@ Sokoban = function() {
 	sokoban.drawable.MathBlock = function(symbol, applyOperand) {
 		this.symbol = symbol;
 		this.draw = function() {
-			console.log('draw movable');
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#bbd");
 			gradient.addColorStop("1","#bbd");
