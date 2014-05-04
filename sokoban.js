@@ -12,37 +12,40 @@ Constants = function(initialGridSize, initialCanvasWidth){
 Sokoban = function() {
 	var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d'),
-	objects = [],
+	objects,
 	player,
 
 	init = function() {
 		sokoban.constants = new Constants(10, 600);
+		objects = new Objects();
 
 		var b = new sokoban.drawable.DeadBlock();
 		b.putAt(3,2);
+		objects.push(b);
 
 		player = new sokoban.drawable.Player();
 		player.putAt(8,1);
+		objects.push(player);
 
 		var t = new sokoban.drawable.Target(3);
 		t.putAt(9,3);
+		objects.push(t);
 
 		var m = new sokoban.drawable.MovableBlock(2);
 		m.putAt(3,8);
+		objects.push(m);
 
 		var plus = new sokoban.drawable.MathBlock('+', function() { console.log('plusss'); });
 		plus.putAt(5,3);
+		objects.push(plus);
 
-		objects.push(b,player,t,m,plus);
 		redraw();
 		bindListeners();
 	},
 	redraw = function() {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		drawGridLines();
-		for(var i = 0; i < objects.length; i++) {
-			objects[i].draw();
-		}
+		objects.drawAll();
 	},
 	drawGridLines = function() {
 		var gradient=context.createLinearGradient(0,0,600, 600);
@@ -66,18 +69,46 @@ Sokoban = function() {
 			context.closePath();
 		}
 	},
+	Objects = function() {
+		var objectList = [];
+		this.push = function(ob) {
+			objectList.push(ob);
+		};
+		this.list = function() {
+			return objectList;
+		};
+		this.objAt = function(x, y) {
+			var currentObject;
+			for(var i = 0; i < objectList.length; i ++) {
+				currentObject = objectList[i];
+				if(currentObject.gX === x && currentObject.gY === y) {
+					return currentObject;
+				}
+			}
+			return undefined;
+		};
+		this.drawAll = function() {
+			for(var i = 0; i < objectList.length; i ++) {
+				objectList[i].draw();
+			}
+		};
+	};
 	move = function(direction) {
+		var newX = player.gX, newY = player.gY;
 		if(direction === sokoban.constants.directions.UP) {
-			player.putAt(player.gX, player.gY - 1);
+			newY = newY - 1;
 		}
 		else if(direction === sokoban.constants.directions.DOWN) {
-			player.putAt(player.gX, player.gY + 1);
+			newY = newY + 1;
 		}
 		else if(direction === sokoban.constants.directions.LEFT) {
-			player.putAt(player.gX - 1, player.gY);
+			newX = newX - 1;
 		}
 		else if(direction === sokoban.constants.directions.RIGHT) {
-			player.putAt(player.gX + 1, player.gY);
+			newX = newX + 1;
+		}
+		if(typeof objects.objAt(newX, newY) === 'undefined' && (newX >= 0) && (newY >=0) && (newX < sokoban.constants.gridSize) && (newY < sokoban.constants.gridSize)){
+			player.putAt(newX, newY);
 		}
 		redraw();
 	},
