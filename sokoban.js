@@ -27,7 +27,7 @@ Sokoban = function() {
 		player.putAt(8,1);
 		objects.push(player);
 
-		var t = new sokoban.drawable.Target(3);
+		var t = new sokoban.drawable.Target(5);
 		t.putAt(9,3);
 		objects.push(t);
 
@@ -39,9 +39,23 @@ Sokoban = function() {
 		m2.putAt(3,5);
 		objects.push(m2);
 
-		var plus = new sokoban.drawable.MathBlock('+', function() { console.log('plusss'); });
+		var plus = new sokoban.drawable.MathBlock('+', function(a,b) {
+			return parseInt(a) + parseInt(b);
+		});
 		plus.putAt(5,3);
 		objects.push(plus);
+
+		var times = new sokoban.drawable.MathBlock('x', function(a,b) {
+			return parseInt(a) * parseInt(b);
+		});
+		times.putAt(5,4);
+		objects.push(times);
+
+		var minus = new sokoban.drawable.MathBlock('-', function(a,b) {
+			return parseInt(a) - parseInt(b);
+		});
+		minus.putAt(5,5);
+		objects.push(minus);
 
 		redraw();
 		bindListeners();
@@ -121,7 +135,7 @@ Sokoban = function() {
 		};
 	};
 	move = function(direction) {
-		var newX = player.gX, newY = player.gY, pushTargetX = player.gX, pushTargetY = player.gY, objectAtNewPos, objectAtPushTarget;
+		var newX = player.gX, newY = player.gY, pushTargetX = player.gX, pushTargetY = player.gY, objectAtNewPos, objectAtPushTarget, mathResultBlock;
 		if(direction === sokoban.constants.directions.UP) {
 			newY = newY - 1;
 			pushTargetY = newY - 1;
@@ -189,6 +203,15 @@ Sokoban = function() {
 		if(objectAtPushTarget.type === 'mathblock') {
 			if(objectAtPushTarget.hasOperand) {
 				// TODO
+				mathResultBlock = new sokoban.drawable.MovableBlock();
+				mathResultBlock.value = objectAtPushTarget.applyOperation(objectAtNewPos);
+				objects.pop(objectAtPushTarget);
+				objects.pop(objectAtNewPos);
+				mathResultBlock.putAt(pushTargetX, pushTargetY);
+				objects.push(mathResultBlock);
+				player.putAt(newX, newY);
+				redraw();
+				return;
 			}
 			else {
 				objectAtPushTarget.hasOperand = true;
@@ -334,11 +357,15 @@ Sokoban = function() {
 			context.closePath();
 		};
 	};
-	sokoban.drawable.MathBlock = function(symbol, applyOperand) {
+	sokoban.drawable.MathBlock = function(symbol, operation) {
 		this.symbol = symbol;
 		this.type = 'mathblock';
 		this.hasOperand = false;
+		this.operation = operation;
 		this.operand;
+		this.applyOperation = function(otherBlock) {
+			return this.operation(otherBlock.value, this.operand.value);
+		}
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			if(this.hasOperand) {
