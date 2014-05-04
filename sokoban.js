@@ -156,6 +156,19 @@ Sokoban = function() {
 			}
 			objectList = tempList;
 		};
+		this.isLevelComplete = function() {
+			var currentObject;
+			for(var i = 0; i < objectList.length; i ++) {
+				currentObject = objectList[i];
+				if(currentObject.type === 'moveableblock') {
+					return false;
+				}
+				else if(currentObject.type === 'target' && !currentObject.satisfied) {
+					return false;
+				}
+			}
+			return true;
+		};
 		this.list = function() {
 			return objectList;
 		};
@@ -246,6 +259,7 @@ Sokoban = function() {
 				objects.pop(objectAtNewPos);
 				player.putAt(newX, newY);
 				redraw();
+				checkForWin();
 				return;
 			}
 		}
@@ -271,6 +285,12 @@ Sokoban = function() {
 				redraw();
 				return;
 			}
+		}
+	},
+	checkForWin = function() {
+		if(objects.isLevelComplete()) {
+			$('#canvas').addClass('victory');
+			$(document).off('keypress');
 		}
 	},
 	navigationKeypressHandler = function(e) {
