@@ -79,16 +79,14 @@ Sokoban = function() {
 			objectList.push(ob);
 		};
 		this.pop = function(ob) {
+			// deletes object(s) at specified object's position
+			// a math block with an operand shares same position as operand; both will be deleted
 			var tempList = [];
 			var currentObject;
 			for(var i = 0; i < objectList.length; i ++) {
 				currentObject = objectList[i];
-				console.log('deleting object at ' + ob.gX + ',' + ob.gY);
 				if((currentObject.gX !== ob.gX) || (currentObject.gY !== ob.gY)) {
 					tempList.push(currentObject);
-				}
-				else {
-					console.log('found ' + currentObject.gX + ',' + currentObject.gY);
 				}
 			}
 			console.log('templist size is ' + tempList.length);
@@ -183,6 +181,20 @@ Sokoban = function() {
 				// success, mark target as happy and delete moveable block
 				objectAtPushTarget.satisfied = true;
 				objects.pop(objectAtNewPos);
+				player.putAt(newX, newY);
+				redraw();
+				return;
+			}
+		}
+		if(objectAtPushTarget.type === 'mathblock') {
+			if(objectAtPushTarget.hasOperand) {
+				// TODO
+			}
+			else {
+				objectAtPushTarget.hasOperand = true;
+				objectAtPushTarget.operand = objectAtNewPos;
+				objectAtNewPos.putAt(pushTargetX, pushTargetY);
+				objectAtNewPos.isOperand = true;
 				player.putAt(newX, newY);
 				redraw();
 				return;
@@ -293,6 +305,10 @@ Sokoban = function() {
 		this.type = 'movableblock';
 		this.isOperand = false;
 		this.draw = function() {
+			if(this.isOperand) {
+				//delegate draw to math block
+				return;
+			}
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#794");
 			gradient.addColorStop("1","#794");
@@ -325,30 +341,58 @@ Sokoban = function() {
 		this.operand;
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
-			gradient.addColorStop("0","#bbd");
-			gradient.addColorStop("1","#bbd");
-			context.strokeStyle=gradient;
-			context.fillStyle=gradient;
-			context.lineWidth=3;
-			context.beginPath();
-			context.moveTo(this.pX, this.pY);
-			context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY);
-			context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY + sokoban.constants.blockWidth);
-			context.lineTo(this.pX, this.pY + sokoban.constants.blockWidth);
-			context.lineTo(this.pX, this.pY);
-			context.fill();
-			context.closePath();
-			gradient=context.createLinearGradient(0,0,600, 600);
-			gradient.addColorStop("0","#fff");
-			gradient.addColorStop("1","#fff");
-			context.beginPath();
-			context.lineWidth=1.5;
-			context.font="60px Sans-Serif";
-			context.fillStyle = gradient;
-			context.textAlign = 'center';
-			context.textBaseline = 'middle';
-			context.fillText(this.symbol, this.pX + (sokoban.constants.blockWidth / 2), this.pY + (sokoban.constants.blockWidth / 2));
-			context.closePath();
+			if(this.hasOperand) {
+				gradient.addColorStop("0","#ebe");
+				gradient.addColorStop("1","#ebe");
+				context.strokeStyle=gradient;
+				context.fillStyle=gradient;
+				context.lineWidth=3;
+				context.beginPath();
+				context.moveTo(this.pX, this.pY);
+				context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY);
+				context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY + sokoban.constants.blockWidth);
+				context.lineTo(this.pX, this.pY + sokoban.constants.blockWidth);
+				context.lineTo(this.pX, this.pY);
+				context.fill();
+				context.closePath();
+				gradient=context.createLinearGradient(0,0,600, 600);
+				gradient.addColorStop("0","#fff");
+				gradient.addColorStop("1","#fff");
+				context.beginPath();
+				context.lineWidth=1.5;
+				context.font="20px Sans-Serif";
+				context.fillStyle = gradient;
+				context.textAlign = 'center';
+				context.textBaseline = 'middle';
+				context.fillText(this.operand.value + '' + this.symbol + '_', this.pX + (sokoban.constants.blockWidth / 2), this.pY + (sokoban.constants.blockWidth / 2));
+				context.closePath();
+			}
+			else {
+				gradient.addColorStop("0","#bbd");
+				gradient.addColorStop("1","#bbd");
+				context.strokeStyle=gradient;
+				context.fillStyle=gradient;
+				context.lineWidth=3;
+				context.beginPath();
+				context.moveTo(this.pX, this.pY);
+				context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY);
+				context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY + sokoban.constants.blockWidth);
+				context.lineTo(this.pX, this.pY + sokoban.constants.blockWidth);
+				context.lineTo(this.pX, this.pY);
+				context.fill();
+				context.closePath();
+				gradient=context.createLinearGradient(0,0,600, 600);
+				gradient.addColorStop("0","#fff");
+				gradient.addColorStop("1","#fff");
+				context.beginPath();
+				context.lineWidth=1.5;
+				context.font="60px Sans-Serif";
+				context.fillStyle = gradient;
+				context.textAlign = 'center';
+				context.textBaseline = 'middle';
+				context.fillText(this.symbol, this.pX + (sokoban.constants.blockWidth / 2), this.pY + (sokoban.constants.blockWidth / 2));
+				context.closePath();
+			}
 		};
 	};
 	sokoban.drawable.DeadBlock.prototype = Drawable.prototype;
