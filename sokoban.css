@@ -29,3 +29,15 @@ div.instructions p.controls img {
   height: 40px;
   vertical-align: middle;
 }
+div.instructions p.meta {
+  border-top: 1px solid #ccc;
+  padding-top: 15px;
+  margin: 0 25px;
+  text-align: center;
+  color: #aaa;
+  font-size: 0.8em;
+}
+div.instructions p.meta a {
+  text-decoration: underline;
+  color: #ccc;
+}
