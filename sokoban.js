@@ -35,6 +35,10 @@ Sokoban = function() {
 		m.putAt(3,8);
 		objects.push(m);
 
+		var m2 = new sokoban.drawable.MovableBlock(3);
+		m2.putAt(3,5);
+		objects.push(m2);
+
 		var plus = new sokoban.drawable.MathBlock('+', function() { console.log('plusss'); });
 		plus.putAt(5,3);
 		objects.push(plus);
@@ -73,6 +77,23 @@ Sokoban = function() {
 		var objectList = [];
 		this.push = function(ob) {
 			objectList.push(ob);
+		};
+		this.pop = function(ob) {
+			var tempList = [];
+			var currentObject;
+			for(var i = 0; i < objectList.length; i ++) {
+				currentObject = objectList[i];
+				console.log('deleting object at ' + ob.gX + ',' + ob.gY);
+				if((currentObject.gX !== ob.gX) || (currentObject.gY !== ob.gY)) {
+					tempList.push(currentObject);
+				}
+				else {
+					console.log('found ' + currentObject.gX + ',' + currentObject.gY);
+				}
+			}
+			console.log('templist size is ' + tempList.length);
+			console.log('original size is ' + objectList.length);
+			objectList = tempList;
 		};
 		this.list = function() {
 			return objectList;
@@ -133,6 +154,9 @@ Sokoban = function() {
 			else if(objectAtNewPos.type === 'target') {
 				return;
 			}
+			else if(objectAtNewPos.type === 'mathblock') {
+				return;
+			}
 		}
 		// Player is trying to push a moveable block
 		if(!((pushTargetX >= 0) && (pushTargetY >=0) && (pushTargetX < sokoban.constants.gridSize) && (pushTargetY < sokoban.constants.gridSize))) {
@@ -140,10 +164,21 @@ Sokoban = function() {
 			return;
 		}
 		if(typeof objectAtPushTarget === 'undefined') {
+			// empty space, allow push
 			objectAtNewPos.putAt(pushTargetX, pushTargetY);
 			player.putAt(newX, newY);
 			redraw();
 			return;
+		}
+		if(objectAtPushTarget.type === 'target' && !objectAtPushTarget.satisfied) {
+			if(objectAtPushTarget.value === objectAtNewPos.value) {
+				// success, mark target as happy and delete moveable block
+				objectAtPushTarget.satisfied = true;
+				objects.pop(objectAtNewPos);
+				player.putAt(newX, newY);
+				redraw();
+				return;
+			}
 		}
 	},
 	navigationKeypressHandler = function(e) {
@@ -199,11 +234,19 @@ Sokoban = function() {
 	sokoban.drawable.Target = function(val) {
 		this.value = val;
 		this.type = 'target';
+		this.satisfied = false;
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
-			gradient.addColorStop("0","#794");
-			gradient.addColorStop("1","#794");
+			if(this.satisfied) {
+				gradient.addColorStop("0","#fc0");
+				gradient.addColorStop("1","#fc0");
+			}
+			else {
+				gradient.addColorStop("0","#794");
+				gradient.addColorStop("1","#794");
+			}
 			context.strokeStyle=gradient;
+			context.fillStyle=gradient;
 			context.lineWidth=3;
 			context.beginPath();
 			context.moveTo(this.pX, this.pY);
@@ -212,14 +255,28 @@ Sokoban = function() {
 			context.lineTo(this.pX, this.pY + sokoban.constants.blockWidth);
 			context.lineTo(this.pX, this.pY);
 			context.stroke();
-			context.closePath();
+			if(this.satisfied) {
+				context.fill();
+				context.closePath();
+				gradient.addColorStop("0","#fff");
+				gradient.addColorStop("1","#fff");
+				context.fillStyle = gradient;
+			}
+			else {
+				context.closePath();
+			}
 			context.beginPath();
 			context.lineWidth=1.5;
 			context.font="60px Sans-Serif";
 			context.fillStyle = gradient;
 			context.textAlign = 'center';
 			context.textBaseline = 'middle';
-			context.strokeText(this.value, this.pX + (sokoban.constants.blockWidth / 2), this.pY + (sokoban.constants.blockWidth / 2));
+			if(this.satisfied) {
+				context.fillText(this.value, this.pX + (sokoban.constants.blockWidth / 2), this.pY + (sokoban.constants.blockWidth / 2));
+			}
+			else {
+				context.strokeText(this.value, this.pX + (sokoban.constants.blockWidth / 2), this.pY + (sokoban.constants.blockWidth / 2));
+			}
 			context.closePath();
 		};
 	};
