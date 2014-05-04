@@ -103,8 +103,6 @@ Sokoban = function() {
 					tempList.push(currentObject);
 				}
 			}
-			console.log('templist size is ' + tempList.length);
-			console.log('original size is ' + objectList.length);
 			objectList = tempList;
 		};
 		this.list = function() {
