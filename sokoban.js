@@ -298,7 +298,7 @@ Sokoban = function() {
 			context.fillStyle=gradient;
 			context.beginPath();
 			gradient.addColorStop("0","#333");
-			gradient.addColorStop("1","#555");
+			gradient.addColorStop("1","#333");
 			context.moveTo(this.pX, this.pY);
 			context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY);
 			context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY + sokoban.constants.blockWidth);
