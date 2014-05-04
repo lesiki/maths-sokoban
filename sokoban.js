@@ -99,11 +99,19 @@ Sokoban = function() {
 			return objectList;
 		};
 		this.objAt = function(x, y) {
+			// returns the object at the specified position.
+			// when a mathblock has an operand, the returned object is the mathblock.
+			// the operand can be accessed from block.operand
 			var currentObject;
 			for(var i = 0; i < objectList.length; i ++) {
 				currentObject = objectList[i];
 				if(currentObject.gX === x && currentObject.gY === y) {
-					return currentObject;
+					if(currentObject.type === 'movableblock' && currentObject.isOperand) {
+						//skip, so that the mathblock is returned instead
+					}
+					else {
+						return currentObject;
+					}
 				}
 			}
 			return undefined;
@@ -283,6 +291,7 @@ Sokoban = function() {
 	sokoban.drawable.MovableBlock = function(val) {
 		this.value = val;
 		this.type = 'movableblock';
+		this.isOperand = false;
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#794");
@@ -312,6 +321,8 @@ Sokoban = function() {
 	sokoban.drawable.MathBlock = function(symbol, applyOperand) {
 		this.symbol = symbol;
 		this.type = 'mathblock';
+		this.hasOperand = false;
+		this.operand;
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#bbd");
