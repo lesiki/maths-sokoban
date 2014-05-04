@@ -1,22 +1,28 @@
 var sokoban = { },
 Constants = function(initialGridSize, initialCanvasWidth){
 	this.gridSize = initialGridSize;
-	this.blockWidth = initialCanvasWidth/initialGridSize;
+	this.blockWidth = initialCanvasWidth/initialGridSize,
+	this.directions = {
+		UP: 0,
+		DOWN: 1,
+		LEFT: 2,
+		RIGHT: 3,
+	};
 },
 Sokoban = function() {
 	var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d'),
 	objects = [],
+	player,
 
 	init = function() {
 		sokoban.constants = new Constants(10, 600);
-		drawGridLines();
 
 		var b = new sokoban.drawable.DeadBlock();
 		b.putAt(3,2);
 
-		var p = new sokoban.drawable.Player();
-		p.putAt(8,1);
+		player = new sokoban.drawable.Player();
+		player.putAt(8,1);
 
 		var t = new sokoban.drawable.Target(3);
 		t.putAt(9,3);
@@ -27,7 +33,13 @@ Sokoban = function() {
 		var plus = new sokoban.drawable.MathBlock('+', function() { console.log('plusss'); });
 		plus.putAt(5,3);
 
-		objects.push(b,p,t,m,plus);
+		objects.push(b,player,t,m,plus);
+		redraw();
+		bindListeners();
+	},
+	redraw = function() {
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		drawGridLines();
 		for(var i = 0; i < objects.length; i++) {
 			objects[i].draw();
 		}
@@ -53,6 +65,38 @@ Sokoban = function() {
 			context.stroke();
 			context.closePath();
 		}
+	},
+	move = function(direction) {
+		if(direction === sokoban.constants.directions.UP) {
+			player.putAt(player.gX, player.gY - 1);
+		}
+		else if(direction === sokoban.constants.directions.DOWN) {
+			player.putAt(player.gX, player.gY + 1);
+		}
+		else if(direction === sokoban.constants.directions.LEFT) {
+			player.putAt(player.gX - 1, player.gY);
+		}
+		else if(direction === sokoban.constants.directions.RIGHT) {
+			player.putAt(player.gX + 1, player.gY);
+		}
+		redraw();
+	},
+	navigationKeypressHandler = function(e) {
+		if(e.which === 119) {
+			move(sokoban.constants.directions.UP);
+		}
+		else if(e.which === 115) {
+			move(sokoban.constants.directions.DOWN);
+		}
+		else if(e.which === 97) {
+			move(sokoban.constants.directions.LEFT);
+		}
+		else if(e.which === 100) {
+			move(sokoban.constants.directions.RIGHT);
+		}
+	},
+	bindListeners = function() {
+		$(document).keypress(navigationKeypressHandler);
 	};
 	sokoban.drawable = {};
 	sokoban.drawable.DeadBlock = function() {
