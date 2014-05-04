@@ -364,7 +364,7 @@ Sokoban = function() {
 		this.operation = operation;
 		this.operand;
 		this.applyOperation = function(otherBlock) {
-			return this.operation(otherBlock.value, this.operand.value);
+			return this.operation(this.operand.value, otherBlock.value);
 		}
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
