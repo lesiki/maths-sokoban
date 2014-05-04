@@ -94,23 +94,57 @@ Sokoban = function() {
 		};
 	};
 	move = function(direction) {
-		var newX = player.gX, newY = player.gY;
+		var newX = player.gX, newY = player.gY, pushTargetX = player.gX, pushTargetY = player.gY, objectAtNewPos, objectAtPushTarget;
 		if(direction === sokoban.constants.directions.UP) {
 			newY = newY - 1;
+			pushTargetY = newY - 1;
 		}
 		else if(direction === sokoban.constants.directions.DOWN) {
 			newY = newY + 1;
+			pushTargetY = newY + 1;
 		}
 		else if(direction === sokoban.constants.directions.LEFT) {
 			newX = newX - 1;
+			pushTargetX = newX - 1;
 		}
 		else if(direction === sokoban.constants.directions.RIGHT) {
 			newX = newX + 1;
+			pushTargetX = newX + 1;
 		}
-		if(typeof objects.objAt(newX, newY) === 'undefined' && (newX >= 0) && (newY >=0) && (newX < sokoban.constants.gridSize) && (newY < sokoban.constants.gridSize)){
+		if(!((newX >= 0) && (newY >=0) && (newX < sokoban.constants.gridSize) && (newY < sokoban.constants.gridSize))) {
+			// don't allow user to go off grid
+			return;
+		}
+		objectAtNewPos = objects.objAt(newX, newY);
+		objectAtPushTarget = objects.objAt(pushTargetX, pushTargetY);
+		if(typeof objectAtNewPos === 'undefined') {
+			// empty space, move on
 			player.putAt(newX, newY);
+			redraw();
+			return;
 		}
-		redraw();
+		else {
+			if(objectAtNewPos.type === 'deadblock') {
+				return;
+			}
+			else if(objectAtNewPos.type === 'target') {
+				return;
+			}
+			else if(objectAtNewPos.type === 'target') {
+				return;
+			}
+		}
+		// Player is trying to push a moveable block
+		if(!((pushTargetX >= 0) && (pushTargetY >=0) && (pushTargetX < sokoban.constants.gridSize) && (pushTargetY < sokoban.constants.gridSize))) {
+			// don't allow user to push moveable block off grid
+			return;
+		}
+		if(typeof objectAtPushTarget === 'undefined') {
+			objectAtNewPos.putAt(pushTargetX, pushTargetY);
+			player.putAt(newX, newY);
+			redraw();
+			return;
+		}
 	},
 	navigationKeypressHandler = function(e) {
 		if(e.which === 119) {
@@ -131,6 +165,7 @@ Sokoban = function() {
 	};
 	sokoban.drawable = {};
 	sokoban.drawable.DeadBlock = function() {
+		this.type = 'deadblock';
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			context.fillStyle=gradient;
@@ -146,6 +181,7 @@ Sokoban = function() {
 		};
 	};
 	sokoban.drawable.Player = function() {
+		this.type='player';
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			context.fillStyle=gradient;
@@ -162,6 +198,7 @@ Sokoban = function() {
 	};
 	sokoban.drawable.Target = function(val) {
 		this.value = val;
+		this.type = 'target';
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#794");
@@ -188,6 +225,7 @@ Sokoban = function() {
 	};
 	sokoban.drawable.MovableBlock = function(val) {
 		this.value = val;
+		this.type = 'movableblock';
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#794");
@@ -216,6 +254,7 @@ Sokoban = function() {
 	};
 	sokoban.drawable.MathBlock = function(symbol, applyOperand) {
 		this.symbol = symbol;
+		this.type = 'mathblock';
 		this.draw = function() {
 			var gradient=context.createLinearGradient(0,0,600, 600);
 			gradient.addColorStop("0","#bbd");
@@ -258,6 +297,7 @@ Drawable.prototype.putAt = function(x, y) {
 	this.pX = x * sokoban.constants.blockWidth;
 	this.pY = y * sokoban.constants.blockWidth;
 };
+Drawable.prototype.type = 'drawable';
 
 $(function() {
 	sokoban.game = new Sokoban();
