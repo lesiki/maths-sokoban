@@ -13,6 +13,9 @@ body {
   margin: 0 auto;
   text-align: center;
   background-color: #fafafa;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
 }
 #canvas.victory {
   background-color: #FFD700;
