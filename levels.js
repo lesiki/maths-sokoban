@@ -1,20 +1,5 @@
 var Levels = [
 	{
-		"title":"One way street",
-		"layout": [
-			"xxxxhxxxxx",
-			"xxxopoxxxx",
-			"xxxo1oxxxx",
-			"xxx3*2xxxx",
-			"xxxoooxxxx",
-			"xxoo+oxxxx",
-			"xxoooooxxx",
-			"xxooo+oxxx",
-			"xxxoo3oxxx",
-			"xxxoooxxxx",
-			]
-	},
-	{
 		"title":"Tutorial 1",
 		"showBasicInstructions":true,
 		"layout": [
@@ -77,6 +62,21 @@ var Levels = [
 			"xoooooooox",
 			"xxoo1+1oxx",
 			"xxxxooxxxx",
+			]
+	},
+	{
+		"title":"One way street",
+		"layout": [
+			"xxxxhxxxxx",
+			"xxxopoxxxx",
+			"xxxo1oxxxx",
+			"xxx3*2xxxx",
+			"xxxoooxxxx",
+			"xxoo+oxxxx",
+			"xxoooooxxx",
+			"xxooo+oxxx",
+			"xxxoo3oxxx",
+			"xxxoooxxxx",
 			]
 	},
 ];
