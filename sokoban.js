@@ -18,7 +18,13 @@ Sokoban = function() {
 
 	levelUp = function() {
 		level = level + 1;
-		setUpLevel();
+		if(level >= Levels.length) {
+			$('div.instructions').html('<h1>Winner!</h1><p>More levels coming soon!</p>');
+			$('div.instructions').append('<p class="meta">Built by Sitati. <a href="https://github.com/lesiki/maths-sokoban">View source on Github</a>.');
+		}
+		else {
+			setUpLevel();
+		}
 	},
 	putBlock = function(x, y, character) {
 		var block;
@@ -60,11 +66,9 @@ Sokoban = function() {
 				putBlock(x, y, currentChar);
 			}
 		}
+		$('.levelTitle').html("" + (level + 1) + " of " + Levels.length);
 		if(Levels[level].title) {
-			$('.levelTitle').html(Levels[level].title).show();
-		}
-		else {
-			$('.levelTitle').hide();
+			$('.levelTitle').append(": " + Levels[level].title);
 		}
 		if(Levels[level].showBasicInstructions) {
 			$('.basicInstructions').show();
