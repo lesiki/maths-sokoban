@@ -60,6 +60,26 @@ Sokoban = function() {
 				putBlock(x, y, currentChar);
 			}
 		}
+		if(Levels[level].title) {
+			$('.levelTitle').html(Levels[level].title).show();
+		}
+		else {
+			$('.levelTitle').hide();
+		}
+		if(Levels[level].showBasicInstructions) {
+			$('.basicInstructions').show();
+		}
+		else {
+			$('.basicInstructions').hide();
+		}
+		if(Levels[level].showAdvancedInstructions) {
+			$('.advancedInstructions').show();
+			$('.basicInstructions').addClass('dimmed');
+		}
+		else {
+			$('.advancedInstructions').hide();
+			$('.basicInstructions').removeClass('dimmed');
+		}
 		redraw();
 	},
 

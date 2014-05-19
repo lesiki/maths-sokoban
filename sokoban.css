@@ -27,6 +27,9 @@ div.instructions {
   padding-left: 10px;
   color: #fff;
 }
+div.instructions p.dimmed {
+  color: #888;
+}
 div.instructions p.controls img {
   width: 40px;
   height: 40px;
@@ -43,4 +46,7 @@ div.instructions p.meta {
 div.instructions p.meta a {
   text-decoration: underline;
   color: #ccc;
+}
+div.instructions p.advancedInstructions {
+  color: #fff;
 }
