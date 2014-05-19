@@ -300,6 +300,7 @@ Sokoban = function() {
 	},
 	bindListeners = function() {
 		$(document).keypress(navigationKeypressHandler);
+		$('#reset').click(function() { setUpLevel(); $(this).blur();});
 	};
 	sokoban.drawable = {};
 	sokoban.drawable.DeadBlock = function() {
