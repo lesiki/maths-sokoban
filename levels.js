@@ -1,5 +1,20 @@
 var Levels = [
 	{
+		"title":"One way street",
+		"layout": [
+			"xxxxhxxxxx",
+			"xxxopoxxxx",
+			"xxxo1oxxxx",
+			"xxx3*2xxxx",
+			"xxxoooxxxx",
+			"xxoo+oxxxx",
+			"xxoooooxxx",
+			"xxooo+oxxx",
+			"xxxoo3oxxx",
+			"xxxoooxxxx",
+			]
+	},
+	{
 		"title":"Tutorial 1",
 		"showBasicInstructions":true,
 		"layout": [
@@ -19,7 +34,6 @@ var Levels = [
 		"title":"Tutorial 2",
 		"showBasicInstructions":true,
 		"showAdvancedInstructions":true,
-		"extraInstructions":"There are also math blocks, in the purply grey. These let you combine two number blocks by applying the operation indicated on the block. Push two number blocks onto a maths block to see it in action.",
 		"layout": [
 			"xxxxxxxxxx",
 			"xxxxxxxxxx",
@@ -32,5 +46,37 @@ var Levels = [
 			"xxxxxxxxxx",
 			"xxxxxxxxxx",
 			]
-	}
+	},
+	{
+		"title":"A bit more math",
+		"showAdvancedInstructions":true,
+		"layout": [
+			"xxooooooox",
+			"xoo2oooooo",
+			"xo+ooooo*o",
+			"xooooooo1o",
+			"xxo3oooooo",
+			"xxxoooooox",
+			"xxxoooooxx",
+			"xxxooooxxx",
+			"xxxxxooxxx",
+			"xxxxxipxxx",
+			]
+	},
+	{
+		"title":"Watch those edges...",
+		"showAdvancedInstructions":true,
+		"layout": [
+			"xxxxooxxxx",
+			"xxxooooxxx",
+			"xoooo1ooox",
+			"xooaxxc-ox",
+			"oooxxxx9oo",
+			"oooxxxxo4p",
+			"xoobxxd6ox",
+			"xoooooooox",
+			"xxoo1+1oxx",
+			"xxxxooxxxx",
+			]
+	},
 ];

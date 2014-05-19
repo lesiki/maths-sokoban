@@ -40,6 +40,11 @@ Sokoban = function() {
 				return parseInt(a) + parseInt(b);
 			});
 		}
+		else if(character === "-") {
+			block = new sokoban.drawable.MathBlock('-', function(a,b) {
+				return parseInt(a) - parseInt(b);
+			});
+		}
 		else if(character === "*") {
 			block = new sokoban.drawable.MathBlock('*', function(a,b) {
 				return parseInt(a) * parseInt(b);
