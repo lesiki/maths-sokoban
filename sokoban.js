@@ -28,10 +28,10 @@ Sokoban = function() {
 	},
 	putBlock = function(x, y, character) {
 		var block;
-		if(character === "x") {
+		if(character === "#") {
 			block = new sokoban.drawable.DeadBlock();
 		}
-		else if(character === "p") {
+		else if(character === "$") {
 			block = new sokoban.drawable.Player();
 			player = block;
 		}
@@ -53,7 +53,7 @@ Sokoban = function() {
 		else if(!isNaN(parseInt(character))) {
 			block = new sokoban.drawable.MovableBlock(parseInt(character));
 		}
-		else if((97 <= character.charCodeAt(0)) && (character.charCodeAt(0) < 111)) {
+		else if((97 <= character.charCodeAt(0)) && (character.charCodeAt(0) < 122)) {
 			block = new sokoban.drawable.Target(character.charCodeAt(0) - 96);
 		}
 		if(typeof block !== 'undefined') {
@@ -63,11 +63,11 @@ Sokoban = function() {
 	},
 	setUpLevel = function() {
 		objects = new Objects();
-
-		for(y = 0; y < 10; y++) {
+		var gridSize = Levels[level].layout.length
+		for(y = 0; y < gridSize; y++) {
 			row = Levels[level].layout[y];
-			for(x = 0; x < 10; x++) {
-				currentChar = row.charAt(x);
+			for(x = 0; x < gridSize; x++) {
+				currentChar = row[x]
 				putBlock(x, y, currentChar);
 			}
 		}
