@@ -61,6 +61,9 @@ Sokoban = function() {
 			objects.push(block);
 		}
 	},
+	getURLParameter = function(name) {
+		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+	},
 	setUpLevel = function() {
 		objects = new Objects();
 		var gridSize = Levels[level].layout.length
@@ -95,6 +98,16 @@ Sokoban = function() {
 	init = function() {
 		var x, y, row, currentChar;
 		sokoban.constants = new Constants(10, 600);
+		var levelInUrl = getURLParameter('g');
+		if(levelInUrl !== null) {
+			Levels = [
+				{
+					"title":"Tutorial 1",
+					"showBasicInstructions":true,
+					"layout": JSON.parse(levelInUrl)
+				}
+			];
+		}
 		level = 0;
 		setUpLevel();
 		bindListeners();
