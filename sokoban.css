@@ -36,7 +36,6 @@ div.instructions p.controls img {
   vertical-align: middle;
 }
 div.instructions p.meta {
-  border-top: 1px solid #ccc;
   padding-top: 15px;
   margin: 0 25px;
   text-align: center;
@@ -46,6 +45,9 @@ div.instructions p.meta {
 div.instructions p.meta a {
   text-decoration: underline;
   color: #ccc;
+}
+div.instructions p.meta + p.meta {
+  padding-top: 0px;
 }
 div.instructions p.advancedInstructions {
   color: #fff;
