@@ -107,7 +107,7 @@ Sokoban = function() {
 					"layout": JSON.parse(levelInUrl)
 				}
 			];
-			sokoban.constants = new Constants(JON.parse(levelInUrl).length, 600);
+			sokoban.constants = new Constants(JSON.parse(levelInUrl).length, 600);
 		}
 		sokoban.constants = new Constants(10, 600);
 		level = 0;
