@@ -67,6 +67,7 @@ Sokoban = function() {
 	setUpLevel = function() {
 		objects = new Objects();
 		var gridSize = Levels[level].layout.length
+		sokoban.constants = new Constants(gridSize, 600);
 		for(y = 0; y < gridSize; y++) {
 			row = Levels[level].layout[y];
 			for(x = 0; x < gridSize; x++) {
@@ -97,7 +98,6 @@ Sokoban = function() {
 
 	init = function() {
 		var x, y, row, currentChar;
-		sokoban.constants = new Constants(10, 600);
 		var levelInUrl = getURLParameter('g');
 		if(levelInUrl !== null) {
 			Levels = [
@@ -107,7 +107,9 @@ Sokoban = function() {
 					"layout": JSON.parse(levelInUrl)
 				}
 			];
+			sokoban.constants = new Constants(JON.parse(levelInUrl).length, 600);
 		}
+		sokoban.constants = new Constants(10, 600);
 		level = 0;
 		setUpLevel();
 		bindListeners();
@@ -325,9 +327,9 @@ Sokoban = function() {
 			gradient.addColorStop("0","#333");
 			gradient.addColorStop("1","#333");
 			context.moveTo(this.pX, this.pY);
-			context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY);
-			context.lineTo(this.pX + sokoban.constants.blockWidth, this.pY + sokoban.constants.blockWidth);
-			context.lineTo(this.pX, this.pY + sokoban.constants.blockWidth);
+			context.lineTo(this.pX + sokoban.constants.blockWidth + 1, this.pY);
+			context.lineTo(this.pX + sokoban.constants.blockWidth + 1, this.pY + sokoban.constants.blockWidth + 1);
+			context.lineTo(this.pX, this.pY + sokoban.constants.blockWidth + 1);
 			context.lineTo(this.pX, this.pY);
 			context.fill();
 		};
