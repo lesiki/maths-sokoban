@@ -117,6 +117,8 @@ Sokoban = function() {
 		bindListeners();
 	},
 	redraw = function() {
+		canvas.setAttribute('width', 600);
+		canvas.setAttribute('height', 600 * sokoban.constants.gridHeight/sokoban.constants.gridWidth);
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		drawGridLines();
 		objects.drawAll();
@@ -135,10 +137,11 @@ Sokoban = function() {
 			context.stroke();
 			context.closePath();
 		}
-		for(var y = 600/sokoban.constants.gridHeight; y < 600; y += 600/sokoban.constants.gridHeight) {
+		var height = canvas.getAttribute('height');
+		for(var y = height/sokoban.constants.gridHeight; y < height; y += height/sokoban.constants.gridHeight) {
 			context.beginPath();
 			context.moveTo(0, y);
-			context.lineTo(600, y);
+			context.lineTo(height, y);
 			context.stroke();
 			context.closePath();
 		}
