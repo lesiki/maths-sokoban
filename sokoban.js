@@ -1,7 +1,8 @@
 var sokoban = { },
-Constants = function(initialGridSize, initialCanvasWidth){
-	this.gridSize = initialGridSize;
-	this.blockWidth = initialCanvasWidth/initialGridSize,
+Constants = function(initialGridWidth, initialGridHeight, initialCanvasWidth){
+	this.gridWidth = initialGridWidth;
+	this.gridHeight = initialGridHeight;
+	this.blockWidth = initialCanvasWidth/initialGridWidth,
 	this.directions = {
 		UP: 0,
 		DOWN: 1,
@@ -66,11 +67,12 @@ Sokoban = function() {
 	},
 	setUpLevel = function() {
 		objects = new Objects();
-		var gridSize = Levels[level].layout.length
-		sokoban.constants = new Constants(gridSize, 600);
-		for(y = 0; y < gridSize; y++) {
+		var gridWidth = Levels[level].layout[0].length;
+		var gridHeight = Levels[level].layout.length;
+		sokoban.constants = new Constants(gridWidth, gridHeight, 600);
+		for(y = 0; y < gridHeight; y++) {
 			row = Levels[level].layout[y];
-			for(x = 0; x < gridSize; x++) {
+			for(x = 0; x < gridWidth; x++) {
 				currentChar = row[x]
 				putBlock(x, y, currentChar);
 			}
@@ -126,14 +128,14 @@ Sokoban = function() {
 		gradient.addColorStop("1.0","#777");
 		context.strokeStyle=gradient;
 		context.lineWidth=0.5;
-		for(var x = 600/sokoban.constants.gridSize; x < 600; x += 600/sokoban.constants.gridSize) {
+		for(var x = 600/sokoban.constants.gridWidth; x < 600; x += 600/sokoban.constants.gridWidth) {
 			context.beginPath();
 			context.moveTo(x, 0);
 			context.lineTo(x, 600);
 			context.stroke();
 			context.closePath();
 		}
-		for(var y = 600/sokoban.constants.gridSize; y < 600; y += 600/sokoban.constants.gridSize) {
+		for(var y = 600/sokoban.constants.gridHeight; y < 600; y += 600/sokoban.constants.gridHeight) {
 			context.beginPath();
 			context.moveTo(0, y);
 			context.lineTo(600, y);
@@ -217,7 +219,7 @@ Sokoban = function() {
 			newX = newX + 1;
 			pushTargetX = newX + 1;
 		}
-		if(!((newX >= 0) && (newY >=0) && (newX < sokoban.constants.gridSize) && (newY < sokoban.constants.gridSize))) {
+		if(!((newX >= 0) && (newY >=0) && (newX < sokoban.constants.gridWidth) && (newY < sokoban.constants.gridHeight))) {
 			// don't allow user to go off grid
 			return;
 		}
@@ -244,7 +246,7 @@ Sokoban = function() {
 			}
 		}
 		// Player is trying to push a moveable block
-		if(!((pushTargetX >= 0) && (pushTargetY >=0) && (pushTargetX < sokoban.constants.gridSize) && (pushTargetY < sokoban.constants.gridSize))) {
+		if(!((pushTargetX >= 0) && (pushTargetY >=0) && (pushTargetX < sokoban.constants.gridWidth) && (pushTargetY < sokoban.constants.gridHeight))) {
 			// don't allow user to push moveable block off grid
 			return;
 		}
