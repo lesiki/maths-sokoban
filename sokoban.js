@@ -141,7 +141,7 @@ Sokoban = function() {
 		for(var y = height/sokoban.constants.gridHeight; y < height; y += height/sokoban.constants.gridHeight) {
 			context.beginPath();
 			context.moveTo(0, y);
-			context.lineTo(height, y);
+			context.lineTo(600, y);
 			context.stroke();
 			context.closePath();
 		}
