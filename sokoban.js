@@ -54,7 +54,7 @@ Sokoban = function() {
 		else if(!isNaN(parseInt(character))) {
 			block = new sokoban.drawable.MovableBlock(parseInt(character));
 		}
-		else if((97 <= character.charCodeAt(0)) && (character.charCodeAt(0) < 122)) {
+		else if((57 <= character.charCodeAt(0)) && (character.charCodeAt(0) < 122)) {
 			block = new sokoban.drawable.Target(character.charCodeAt(0) - 96);
 		}
 		if(typeof block !== 'undefined') {
