@@ -2,6 +2,6 @@
 
 A game concept that fuses [Sokoban](https://en.wikipedia.org/wiki/Sokoban?oldformat=true) with Maths!
 
-[Give it a spin](http://lesikidev.com/maths-sokoban/)
+[Give it a spin](https://sitati.dev/maths-sokoban/)
 
 License: BSD-2-Clause.
